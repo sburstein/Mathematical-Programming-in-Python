@@ -1,8 +1,13 @@
-#power.py code
 
 import numpy as np
 from numpy import random
 from matplotlib import pyplot as plt
+
+# By Scott Burstein
+
+# Source Code Built from Math 260 power.py
+
+# I collaborated with Sarah Northover on HW 7
 
 def RayleighQuot(vector):
         return np.sqrt(vector.dot(vector))
@@ -21,23 +26,20 @@ def power_method(a, steps, actualVal):
             x, r - the eigenvector/value pair such that a*x = r*x
     """
 
-    #Predefined parameters"
-    err_tolerance=1e-10
-    max_num_steps = 150
-
     n = a.shape[0]
     x = random.rand(n)
     it = 0
-    error = err_tolerance
+
+    
 
     real_error_array = []
 
-    while it < steps and error >= err_tolerance:  # other stopping conditions would go here
+    while it < steps: # and error >= err_tolerance:  # other stopping conditions would go here
         q = np.dot(a, x)  # compute a*x
         r = x.dot(q)    # Rayleigh quotient x_k dot Ax_k / x_k dot x_k
 
         temp_space = q / RayleighQuot(q)
-        error = AbsMax( x - temp_space )
+        #error = AbsMax( x - temp_space )
 
         x[:] = temp_space[:]
 
@@ -60,34 +62,38 @@ def power_method(a, steps, actualVal):
 
 
 if __name__ == "__main__":   # (3x3 matrix)
+    
     a = np.array([[0.0, 1, 0], [0, 0, 1], [6, -11, 6]])
+    
     # eigenvalues: 3, 2, 1
     # eigenvalues/vectors:
+    
     vector_1 = np.array([1, 3, 9])
 
     actual_vect1_val = vector_1 / RayleighQuot(vector_1)
 
-    x, r, real_error_array = power_method(a, 100, actual_vect1_val)
+    evec, eig, error = power_method(a, 100, actual_vect1_val)
 
-    q = np.dot(a, x)
-    temp_space = q / RayleighQuot(q)
-    error = AbsMax( x - temp_space )
+    print(f"Largest eigenvalue: {eig:.2f}")
+    print("Eigenvector: ", evec)
+    print(f"Average Error: {np.average(error):.5f}")
 
     np.set_printoptions(precision=3)  # set num. of displayed digits
 
-    #print(x,r,real_error_array)
-
     plt.figure(figsize = (5, 5))
-    nvals = range(0, len(real_error_array))
-    plt.semilogy(nvals, real_error_array, '.-k')
-    reference_line = [(2/3)**n for n in range(5)] #nvals
-    plt.semilogy(nvals, ref_line, '--r')
+
+    nvals = range(0, len(error))
+
+    plt.semilogy(nvals, error, '.-k')
+
+    #reference line:        
+    vals = [1.5**(-v) for v in nvals]
+
+    plt.semilogy(nvals, vals, '--r')
+
     plt.xlabel('$n$')
     plt.ylabel('err')
     plt.legend(['error in evec', 'slope -2/3'])
-    plt.savefig('PowerMethodConvergence.pdf')
+    plt.savefig('PowerMethodConvergence.pdf', bbox_inches='tight')
 
-
-
-    #print(f"Largest eigenvalue: {eig:.2f}")
-    #print("Eigenvector: ", evec)
+    plt.show()
