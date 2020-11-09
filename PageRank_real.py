@@ -83,6 +83,12 @@ if __name__ == "__main__":
     PT_matrix = power_method_ranking(adj_dict, name_length)
     sparse_matrix = sparse_rank(PT_matrix, 0.99, steps = 500)
 
-    """
-    Unsure how to print top 10 ranked pages...
-    """
+    all_tups = zip(names_dict.values(), sparse_matrix)
+    tup_list = []
+    for page, rank in all_tups:
+        tup = (page, rank)
+        tup_list.append(tup)
+    tup_list.sort(key = lambda x : x[1], reverse = True)
+
+    for num in range(1,11):
+        print( str(num) + "     " + str(tup_list[num]) )
