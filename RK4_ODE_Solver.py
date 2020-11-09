@@ -57,6 +57,9 @@ def test(r = 1, y0 = 0.5, t0 = 0, t1 = 5, h = 0.2):
     plt.title('Computed and Exact Solutions to Logistic Population Growth ODE')
     plt.legend(frameon = True, loc = 'lower right')
     
+    plt.savefig("Computed_Solution_Plot")
+    plt.show()
+    
 def error(r = 1, y0 = 0.5, t0 = 0, t1 = 5, h = 0.2):
 
     t, u = RungeKutta4(r, y0, t0, t1, h)
@@ -78,10 +81,14 @@ def error_list():
     plt.xlabel('k')
     plt.ylabel('Error')
     plt.title('Max Error Values of RK4 ODE Solver When h = 2^-k')
+    
+    plt.savefig("Error_Plot")
+    plt.show()
 
 
 
 if __name__ == "__main__":
     
-    error_list()
     test()
+    error_list()
+    
